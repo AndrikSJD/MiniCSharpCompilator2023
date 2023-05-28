@@ -1,0 +1,91 @@
+﻿<Window x:Class="Proyecto.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:compilador="clr-namespace:Proyecto"
+        mc:Ignorable="d"
+        Background="#333C42"    
+        ResizeMode="NoResize"
+        Title="MainWindow" Height="460" Width="870">
+    <Grid>
+        <TabControl 
+            DisplayMemberPath="Header"
+            Name="Tab"
+            Height="375"
+            Width="700"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="20,10,0,0"
+        >
+            <TabItem Header= "Principal" Name="Principal">
+                <TextBox
+                    TextChanged="Pantalla_TextChanged"
+                    SelectionChanged="Pantalla_SelectionChanged"
+                    FontFamily="Consolas"
+                    FontSize="14"
+                    Name="Pantalla"
+                    Background="#28242c"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Height="350"
+                    Width="700"
+                    TextWrapping="Wrap"
+                    AcceptsTab="True"
+                    AcceptsReturn="True"
+                    VerticalScrollBarVisibility="Visible"
+                    Foreground="White"
+                ></TextBox>
+            </TabItem>     
+
+        </TabControl>
+        <Button Background="Linen" 
+                Content="Upload file"
+                Click="Upload_File_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,10,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"
+        />
+        <Button Background="Linen" 
+                Content="Run" 
+                Click="Run_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,40,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
+        <Button Background="Linen" 
+                Content="Add File"
+                Click="Add_Tab_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,70,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
+        <Button Background="Linen" 
+                Content="Remove File"
+                Click="closeButton_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,100,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
+        <Button Background="Linen" 
+                Content="Exit"
+                Click="Exit_Button_Click"
+                HorizontalAlignment="Right" 
+                Margin="10,130,15,10" 
+                VerticalAlignment="Top" 
+                Width="75"/>
+        <Label
+            BorderThickness="1"
+            Name="Output"
+            FontWeight="Bold"
+            FontSize="14"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,10,10"
+            Foreground="White">
+        </Label>
+    </Grid>
+
+</Window>
+

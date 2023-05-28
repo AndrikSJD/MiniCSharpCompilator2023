@@ -1,0 +1,29 @@
+﻿<Window x:Class="Proyecto.Consola"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Proyecto"
+        mc:Ignorable="d"
+        Background="#333C42"
+        ResizeMode="NoResize"
+        Title="Consola" Height="300" Width="830">
+    <Grid>
+        <TextBox
+            FontFamily="Consolas"
+            FontSize="14"
+            Name="SalidaConsola"
+            Background="#28242c"
+            HorizontalAlignment="Left"
+            Height="245"
+            Width="795"
+            Margin="10,10,0,0"
+            TextWrapping="Wrap" 
+            VerticalAlignment="Top" 
+            AcceptsTab="True" 
+            AcceptsReturn="True"
+            VerticalScrollBarVisibility="Visible"
+            Foreground="White"
+        ></TextBox>
+    </Grid>
+</Window>
