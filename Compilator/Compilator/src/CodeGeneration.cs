@@ -11,7 +11,7 @@ namespace Compilator;
 
 public class CodeGeneration: MiniCSharpParserBaseVisitor<Object>
 {
-    private Type _pointTypeData = null;
+    private Type _pointType = null;
     private string asmFileName = "test.exe";
     private AssemblyName myAsmName = new AssemblyName();
 
@@ -33,7 +33,7 @@ public class CodeGeneration: MiniCSharpParserBaseVisitor<Object>
 
 
 
-    public CodeGeneration()
+    public CodeGeneration(string fileName)
     {
         metodosGlobales = new List<MethodBuilder>();
             
@@ -42,8 +42,8 @@ public class CodeGeneration: MiniCSharpParserBaseVisitor<Object>
         myModuleBldr = myAsmBldr.DefineDynamicModule(asmFileName);
         myTypeBldr = myModuleBldr.DefineType("TestClass");
             
-        Type objTypeData = Type.GetType("System.Object");
-        objCtor = objTypeData.GetConstructor(new Type[0]);
+        Type objType = Type.GetType("System.Object");
+        objCtor = objType.GetConstructor(new Type[0]);
             
         Type[] ctorParams = new Type[0];
         ConstructorBuilder pointCtor = myTypeBldr.DefineConstructor(
@@ -63,11 +63,26 @@ public class CodeGeneration: MiniCSharpParserBaseVisitor<Object>
         writeMS = typeof(Console).GetMethod(
             "WriteLine",
             new Type[] { typeof(string) });
+
     }
     
     public override object VisitProgramAST(MiniCSharpParser.ProgramASTContext context)
     {
-        return base.VisitProgramAST(context);
+
+
+        foreach (var node in context.children)
+        {
+            Visit(node);
+
+        }
+        
+        _pointType = myTypeBldr.CreateType(); //crea la clase para ser luego instanciada
+        myAsmBldr.SetEntryPoint(pointMainBldr);
+        myAsmBldr.Save(asmFileName);
+            
+        return _pointType;
+        
+
     }
 
     public override object VisitUsingAST(MiniCSharpParser.UsingASTContext context)
@@ -127,12 +142,33 @@ public class CodeGeneration: MiniCSharpParserBaseVisitor<Object>
        //              FieldAttributes.Private);
        //      }
        //  }
+
+       
+       Type varType = (Type)Visit(context.type());
+       
+       
+       foreach (var ident in context.ident())
+       {
+           System.Diagnostics.Debug.WriteLine("VisitVarDeclAST");
+           System.Diagnostics.Debug.WriteLine("Ident: "+ ident.declPointer.GetText());
+           System.Diagnostics.Debug.WriteLine("isLocal: "+context.isLocal);
+           System.Diagnostics.Debug.WriteLine("indexVar: "+context.indexVar);
+
+       }
+       
+      
+         
     
         return null;
     }
 
     public override object VisitClassDeclAST(MiniCSharpParser.ClassDeclASTContext context)
     {
+
+        foreach (var var in context.varDecl())
+        {
+            Visit(var);
+        }
         return base.VisitClassDeclAST(context);
     }
 

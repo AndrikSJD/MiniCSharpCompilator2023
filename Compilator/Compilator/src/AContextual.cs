@@ -216,12 +216,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Int, context);
                                 _symbolTable.Insert(array);
-                                
+                                ident.declPointer = context;
+
                             }
                             else if (varType is PrimaryTypeData.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
+                                ident.declPointer = context;
                             }
                         }
                     }
@@ -246,12 +248,15 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             if (varType is PrimaryTypeData.PrimaryTypes.Int)
                             {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Int, context);
-                                _symbolTable.Insert(array);    
+                                _symbolTable.Insert(array); 
+                                ident.declPointer = context;
+                                
                             }
                             else if (varType is PrimaryTypeData.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
                             {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
+                                ident.declPointer = context;
                                 
                             }
                         }
@@ -270,7 +275,8 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if(_symbolTable.currentMethod != null) //es una variable local dentro de un metodo
                         {
-                         
+                            //se establece el contexto de la variable como local
+                            context.isLocal = true;
                             
                             TypeData typeDataVariable = _symbolTable.Search(token.Text);
                             TypeData methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
@@ -305,6 +311,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 
                                 _symbolTable.Insert(element);
+                                ident.declPointer = context;
                             }
 
                            
@@ -326,6 +333,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 ClassVarTypeData element = new ClassVarTypeData(token, _symbolTable.currentLevel, context.type().GetText(), context);
                                 _symbolTable.Insert(element);
+                                ident.declPointer = context;
                             }
                         }
                         else
@@ -345,8 +353,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             // Verificar si la variable ya ha sido declarada
                             if (!_symbolTable.currentClass.BuscarAtributo(element.GetToken().Text))
                             {
+                                //se establece el contexto de la variable como local
+                                context.isLocal = true;
+                                
                                 _symbolTable.Insert(element);
                                 _symbolTable.currentClass.parametersL.AddLast(element);
+                                ident.declPointer = context;
                             }
                             else
                             { 
@@ -358,14 +370,13 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                         }
                         else if(_symbolTable.currentMethod!= null) //es una variable local dentro de un metodo
                         {
+                            
+                            //se establece el contexto de la variable como local
+                            context.isLocal = true;
+                            
                             TypeData typeDataVariable = _symbolTable.Search(token.Text);
                             TypeData methodRepeatedVar = _symbolTable.getRepeatedParameter(token.Text);
-                            // // Verificar si la variable ya ha sido declarada
-                            // if (variableglobal!= null && variableglobal.Level <= _symbolTable.currentLevel && !(_symbolTable.searchClassAttribute(token.Text)))
-                            // { 
-                            //     // Mostrar error si la variable ya fue declara
-                            //     consola.SalidaConsola.AppendText($"Error: La variable \"{token.Text}\" ya ha sido declarada como variable local. {ShowToken(currentToken)}\n");
-                            // }
+                            
 
                             
                             if (typeDataVariable != null && typeDataVariable.Level == 0)
@@ -393,6 +404,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             else
                             {
                                 _symbolTable.Insert(element);
+                                ident.declPointer = context;
                             }
                         }
                         else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
@@ -409,6 +421,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             else
                             {
                                 _symbolTable.Insert(element);
+                                ident.declPointer = context;
                             }
                         }
 
@@ -1648,12 +1661,12 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         }
       
 
-        if (typeIdent != null)
-        {
-            //TODO: Se hace el puntero del ident hacia el contexto del var declaration
-            context.ident(0).declPointer = typeIdent.ContextGetSet;
-
-        }
+        // if (typeIdent != null)
+        // {
+        //     //TODO: Se hace el puntero del ident hacia el contexto del var declaration
+        //     context.ident(0).declPointer = typeIdent.ContextGetSet;
+        //
+        // }
 
         
         // Si el tipo de la variable es un arreglo y solo hay una expresión

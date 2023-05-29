@@ -224,8 +224,8 @@ namespace Proyecto
                         }
                         else
                         {
-                            // CodeGeneration codeGeneration = new CodeGeneration();
-                            // codeGeneration.Visit(tree);
+                            CodeGeneration codeGeneration = new CodeGeneration(nombreArchivo);
+                            codeGeneration.Visit(tree);
                         }
                             
                     }
