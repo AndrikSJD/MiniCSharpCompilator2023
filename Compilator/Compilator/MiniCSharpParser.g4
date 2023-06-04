@@ -44,9 +44,13 @@ condFact : expr relop expr                                          #condFactAST
 
 cast : LPARENT type RPARENT                                         #castAST;         
 
-expr : (SUB | cast)? term ((ADD | SUB) term)*                       #expressionAST;
+expr : (SUB | cast)? term (addop term)*                       #expressionAST;
 
-term : factor ((MUL | DIV | MOD) factor)*                            #termAST;
+addop: (ADD | SUB)                                                #addopAST;
+
+term : factor (muldimod factor)*                            #termAST;
+
+muldimod : (MUL | DIV | MOD)  #muldimodAST;
 
 factor : designator (LPARENT actPars? RPARENT)?                #factorAST
     | (SUB)? INTCONST                                   #numFactorAST

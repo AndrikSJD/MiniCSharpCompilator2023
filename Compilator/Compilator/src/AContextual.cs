@@ -217,6 +217,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Int, context);
                                 _symbolTable.Insert(array);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
 
                             }
                             else if (varType is PrimaryTypeData.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
@@ -224,6 +225,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
                         }
                     }
@@ -250,6 +252,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Int, context);
                                 _symbolTable.Insert(array); 
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                                 
                             }
                             else if (varType is PrimaryTypeData.PrimaryTypes.Char ) //al validar el tipo de la variable, si no es int, es char anteriormente se valido si no era valido isError = true
@@ -257,6 +260,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 ArrayTypeData array = new ArrayTypeData(token, _symbolTable.currentLevel, ArrayTypeData.ArrTypes.Char, context);
                                 _symbolTable.Insert(array);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                                 
                             }
                         }
@@ -312,6 +316,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 
                                 _symbolTable.Insert(element);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
 
                            
@@ -334,6 +339,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 ClassVarTypeData element = new ClassVarTypeData(token, _symbolTable.currentLevel, context.type().GetText(), context);
                                 _symbolTable.Insert(element);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
                         }
                         else
@@ -359,6 +365,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                                 _symbolTable.Insert(element);
                                 _symbolTable.currentClass.parametersL.AddLast(element);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
                             else
                             { 
@@ -405,6 +412,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 _symbolTable.Insert(element);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
                         }
                         else if (_symbolTable.currentClass == null && _symbolTable.currentMethod == null) //es una variable global
@@ -422,6 +430,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
                             {
                                 _symbolTable.Insert(element);
                                 ident.declPointer = context;
+                                context.indexVar += 1;
                             }
                         }
 
@@ -555,7 +564,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         if (!isError)
         {
 
-            if (methodType != null && context.block().GetText().Equals("{}"))
+            if (methodType != null && context.block().GetText().Equals("{}") && (context.VOID() == null))
             {
                 consola.SalidaConsola.AppendText($"Error: en el metodo {context.ident().GetText()} falta el retorno de tipo {methodType.ToString()}. {ShowToken(currentToken)} \n");
             } else if (!(context.block().GetText().Contains("return")) && methodType != null && (context.VOID()== null))
@@ -1411,6 +1420,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             // Obtenemos el tipo del término actual
             string currentTerm = (string)Visit(context.term(i));
+            
+            //Visitamos el operador de la expresión
+            Visit(context.addop(i - 1));
 
             // Verificamos si el tipo del término actual es diferente al tipo del primer término
             if (termType != currentTerm)
@@ -1441,6 +1453,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
             int i = 1;
             while (i < context.factor().Length && factorType == (string)Visit(context.factor(i)))
             {
+                Visit(context.muldimod(i - 1));
                 i++;
             }
 
@@ -1653,20 +1666,14 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         
         if(typeIdent == null)
         {
-            System.Diagnostics.Debug.WriteLine($"Error: No se encontró el identificador. {ShowToken(currentToken)}\n");
+            consola.SalidaConsola.AppendText($"Error: No se encontró el identificador. {ShowToken(currentToken)}\n");
         }
         else
         {
-            System.Diagnostics.Debug.WriteLine("DESIGNATOR TYPE ENCONTRADO: "+ typeIdent.GetToken().Text + " y es de tipo: " + typeIdent.GetStructureType());
+            
         }
       
-
-        // if (typeIdent != null)
-        // {
-        //     //TODO: Se hace el puntero del ident hacia el contexto del var declaration
-        //     context.ident(0).declPointer = typeIdent.ContextGetSet;
-        //
-        // }
+        
 
         
         // Si el tipo de la variable es un arreglo y solo hay una expresión
@@ -1785,5 +1792,9 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         return null;
         
     }
-    
+
+    public override object VisitAddopAST(MiniCSharpParser.AddopASTContext context)
+    {
+        return null;
+    }
 }

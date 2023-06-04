@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Compilator/Compilator\MiniCSharpScanner.g4 by ANTLR 4.12.0
+// Generated from C:/Users/user/Escritorio/Compi/Proyecto/thirdStage/MiniCSharpCompilator2023/Compilator/Compilator\MiniCSharpScanner.g4 by ANTLR 4.12.0
 
 // Unreachable code detected
 #pragma warning disable 0162

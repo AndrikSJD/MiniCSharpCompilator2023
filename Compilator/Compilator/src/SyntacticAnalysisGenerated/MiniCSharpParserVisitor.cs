@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Compilator/Compilator\MiniCSharpParser.g4 by ANTLR 4.12.0
+// Generated from C:/Users/user/Escritorio/Compi/Proyecto/thirdStage/MiniCSharpCompilator2023/Compilator/Compilator\MiniCSharpParser.g4 by ANTLR 4.12.0
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -208,12 +208,26 @@ public interface IMiniCSharpParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitExpressionAST([NotNull] MiniCSharpParser.ExpressionASTContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>addopAST</c>
+	/// labeled alternative in <see cref="MiniCSharpParser.addop"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAddopAST([NotNull] MiniCSharpParser.AddopASTContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>termAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.term"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTermAST([NotNull] MiniCSharpParser.TermASTContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>muldimodAST</c>
+	/// labeled alternative in <see cref="MiniCSharpParser.muldimod"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMuldimodAST([NotNull] MiniCSharpParser.MuldimodASTContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>factorAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.factor"/>.

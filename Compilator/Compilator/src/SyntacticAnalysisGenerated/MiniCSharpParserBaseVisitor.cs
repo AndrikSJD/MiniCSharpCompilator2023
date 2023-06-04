@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/kp077/OneDrive/Escritorio/TEC/Quinto_Semestre/Compi/Compilator/Compilator\MiniCSharpParser.g4 by ANTLR 4.12.0
+// Generated from C:/Users/user/Escritorio/Compi/Proyecto/thirdStage/MiniCSharpCompilator2023/Compilator/Compilator\MiniCSharpParser.g4 by ANTLR 4.12.0
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -311,6 +311,17 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <return>The visitor result.</return>
 	public virtual Result VisitExpressionAST([NotNull] MiniCSharpParser.ExpressionASTContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>addopAST</c>
+	/// labeled alternative in <see cref="MiniCSharpParser.addop"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitAddopAST([NotNull] MiniCSharpParser.AddopASTContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>termAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.term"/>.
 	/// <para>
@@ -321,6 +332,17 @@ public partial class MiniCSharpParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitTermAST([NotNull] MiniCSharpParser.TermASTContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by the <c>muldimodAST</c>
+	/// labeled alternative in <see cref="MiniCSharpParser.muldimod"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitMuldimodAST([NotNull] MiniCSharpParser.MuldimodASTContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>factorAST</c>
 	/// labeled alternative in <see cref="MiniCSharpParser.factor"/>.

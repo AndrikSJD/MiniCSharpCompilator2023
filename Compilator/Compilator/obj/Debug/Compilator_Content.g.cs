@@ -14,5 +14,6 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("src/syntacticanalysisgenerated/minicsharpparser.tokens")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("src/syntacticanalysisgenerated/minicsharpscanner.interp")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("src/syntacticanalysisgenerated/minicsharpscanner.tokens")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("src/test.txt")]
 
 

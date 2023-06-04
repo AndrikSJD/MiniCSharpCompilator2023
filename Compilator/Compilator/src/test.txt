@@ -1,0 +1,48 @@
+﻿class Program{
+
+		int v;
+	
+	class Point{
+
+		
+		char g;
+		
+	}
+
+
+	int chancleta(){
+
+		int p;
+		
+		return 5;
+
+	}
+
+
+void Main(){
+		int y;
+		y = 12;
+		int z;
+		z = ((2 + 1 +5) * 2)*14;	
+		write(y);
+		int x;
+		v = 10;
+       		 while(v > 1)
+        	{
+            		write(v);
+            		v--;
+	
+		}
+
+
+		int j;
+		j = 0;
+		 for(j;j<10;j++;){
+			write(99);
+		}
+
+}	
+
+}
+
+
