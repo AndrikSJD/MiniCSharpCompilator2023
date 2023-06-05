@@ -263,10 +263,10 @@ namespace Proyecto
               
             
             Consola salida = new Consola();
-            //Aqui va la logica para ejecutar el codigo
+            
             try
             {
-
+                            //Aqui va la logica para ejecutar el codigo
                             Process myProcess = new Process();
                             myProcess.StartInfo.UseShellExecute = false;
                             myProcess.StartInfo.FileName = @"../../bin/Debug/test.exe";
