@@ -872,7 +872,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
     {
 
         //Se obtiene el tipo del factor
-        Type typeFact = (Type)Visit(context.factor(0));
+        Type typeFactor = (Type)Visit(context.factor(0));
         //En caso de que la expresion sea compleja
         if (context.factor().Length>1)
         {
@@ -884,7 +884,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
             }
         }
         
-        return typeFact;
+        return typeFactor;
     }
 
     public override object VisitMuldimodAST(MiniCSharpParser.MuldimodASTContext context)
@@ -909,7 +909,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
     public override object VisitFactorAST(MiniCSharpParser.FactorASTContext context)
         {
             //Se obtiene el tipo del designador
-            Type typeDesignator = (Type)Visit(context.designator());
+            Type typeDsg = (Type)Visit(context.designator());
 
             //se visitan los parametros
             if (context.actPars() != null)
@@ -917,7 +917,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
                 Visit(context.actPars());
             }
             
-            return typeDesignator;
+            return typeDsg;
         }
 
         public override object VisitNumFactorAST(MiniCSharpParser.NumFactorASTContext context)
