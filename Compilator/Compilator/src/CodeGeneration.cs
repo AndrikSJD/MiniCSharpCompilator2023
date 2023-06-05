@@ -644,15 +644,9 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
         }
         else if (type == typeof(bool))
         {
-            int num;
             //en caso de que venga un true
-            if (context.valueInput != null)
-            {
-                num = context.valueInput == "true" ? 1 : 0;
-            }
-            else//en caso de que sea false
-            { num = 0;
-            }
+         
+            int num = context.valueInput == "false" ? 0 : 1;
 
             //se agrega el valor a la pila como entero 1 o 0
             currentIL.Emit(OpCodes.Ldc_I4, num);
@@ -702,12 +696,8 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
     public override object VisitBlockStatementAST(MiniCSharpParser.BlockStatementASTContext context)
     {
         
-        string result = (string) Visit(context.block());
-
-        if (result!=null && result.Equals("break"))
-        {
-            return "break";
-        }
+       Visit(context.block());
+       
         return null;
     }
 
@@ -723,14 +713,11 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
 
     public override object VisitBlockAST(MiniCSharpParser.BlockASTContext context)
     {
-        String result = "";
+     
         foreach (var node in context.children)
         {
-            result = (string)Visit(node);
-            if (result != null && result.Equals("break"))
-            {
-                return "break";
-            }
+           Visit(node);
+            
         }
 
         return null;
