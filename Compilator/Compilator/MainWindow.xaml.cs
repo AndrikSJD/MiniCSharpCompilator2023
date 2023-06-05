@@ -8,7 +8,6 @@ using Antlr4.Runtime;
 using Compilator;
 using Microsoft.Win32;
 using SyntacticAnalysisGenerated;
-using System.Windows.Shapes;
 
 
 namespace Proyecto
@@ -221,6 +220,18 @@ namespace Proyecto
                         {
                             MessageBox.Show("Error en el analisis contextual del codigo, no se puede generar el ejecutable","Error", MessageBoxButton.OK, MessageBoxImage.Error); 
                         }
+                        else
+                        {
+                            //Generacion de codigo .exe
+                            CodeGeneration codeGenerated = new CodeGeneration();
+                            Type pointType = (Type)  codeGenerated.Visit(tree);
+                            object ptInstance = Activator.CreateInstance(pointType, null);
+                            pointType.InvokeMember("Main", 
+                                BindingFlags.InvokeMethod,
+                                null,
+                                ptInstance,
+                                new object[0]);
+                        }
 
                     }
 
@@ -248,88 +259,14 @@ namespace Proyecto
         
         private void Run_Button_Click(object? sender, RoutedEventArgs e) 
         {
-            if (!string.IsNullOrEmpty(nombreArchivo))
-            {
-                try
-                {
-                    // Guardar el contenido del TextBox en el archivo
-                    using (StreamWriter escribir = new StreamWriter(nombreArchivo))
-                    {
-                        escribir.Write(Pantalla.Text);
-                    }
-
-                    
-                    
-                   
-                }
-                catch (Exception exception)
-                {
-                    System.Diagnostics.Debug.WriteLine("Error al guardar el archivo");
-                    System.Diagnostics.Debug.WriteLine(exception);
-                    throw;
-                }
-                
-                
+           
+              
+            
+            Consola salida = new Consola();
             //Aqui va la logica para ejecutar el codigo
             try
             {
-                //Extraer texto de la pantalla principal
-                ICharStream input = CharStreams.fromString(Pantalla.Text);
-            
-                //Escanea el texto que se le manda del input
-                MiniCSharpScanner scanner = new MiniCSharpScanner(input);
-                // Organiza los tokens streams
-                CommonTokenStream tokens = new CommonTokenStream(scanner);
-                //Le manda los tokens al parser
-                MiniCSharpParser parser = new MiniCSharpParser(tokens);
-                // Manejo de errores en español
-                MyErrorStrategy errorStrategy = new MyErrorStrategy();
-                //Remueve los error listeners
-                scanner.RemoveErrorListeners();
-                parser.RemoveErrorListeners();
-                //Crea un nuevo error listener
-                ParserErrorListener parserErrorListener = new ParserErrorListener();
-                ScannerErrorListener scannerErrorListener = new ScannerErrorListener();
-                //Agrega los error listener
-                scanner.AddErrorListener(scannerErrorListener);
-                parser.AddErrorListener(parserErrorListener);
-                parser.ErrorHandler = errorStrategy;
-                //Obtiene el resultado
-                MiniCSharpParser.ProgramContext tree = parser.program();
-            
-                
-                //Mostrar texto de salida
-                Consola salida = new Consola();
-                //Verifica si hay errores
 
-                try
-                {
-                    if (parserErrorListener.HasErrors() || scannerErrorListener.HasErrors())
-                    {
-                        salida.SalidaConsola.Text = "Errorer de parser: " + parserErrorListener.ToString()  +
-                                                    "\nErrores de escaner: "+ scannerErrorListener.ToString();
-                    }
-                    else
-                    {
-                    
-                        //Analisis contextual
-                        AContextual contextA = new AContextual(salida);
-                        contextA.Visit(tree);
-                        if (salida.SalidaConsola.Text.Contains("Error:"))
-                        {
-                            MessageBox.Show("Error en el analisis contextual del codigo, no se puede generar el ejecutable","Error", MessageBoxButton.OK, MessageBoxImage.Error); 
-                        }
-                        else
-                        {
-                            CodeGeneration codeGenerated = new CodeGeneration();
-                            Type pointType = (Type)  codeGenerated.Visit(tree);
-                            object ptInstance = Activator.CreateInstance(pointType, null);
-                            pointType.InvokeMember("Main", 
-                                BindingFlags.InvokeMethod,
-                                null,
-                                ptInstance,
-                                new object[0]);
-                            
                             Process myProcess = new Process();
                             myProcess.StartInfo.UseShellExecute = false;
                             myProcess.StartInfo.FileName = @"../../bin/Debug/test.exe";
@@ -343,13 +280,7 @@ namespace Proyecto
                             salida.SalidaConsola.AppendText(consoleOutput);
                             
                             salida.SalidaConsola.LineDown();
-                           
-
-                        }
-                            
-                    }
-
-                }
+            }
                 catch (Exception exception)
                 {
                     Console.WriteLine(exception);
@@ -357,17 +288,6 @@ namespace Proyecto
                 }
                
                 salida.Show();
-            }
-            catch (Exception exception)
-            { 
-                MessageBox.Show("Error al ejecutar el codigo","Error!!", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw;
-            }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, abra un archivo antes de ejecutar el codigo","Advertencia!!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
         
         private void Exit_Button_Click(object? sender, RoutedEventArgs e)

@@ -163,3 +163,5 @@ C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Comp
 C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Compilator\Compilator\obj\Debug\Compilator.csproj.CopyComplete
 C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Compilator\Compilator\obj\Debug\Compilator.exe
 C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Compilator\Compilator\obj\Debug\Compilator.pdb
+C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Compilator\Compilator\obj\Debug\InputWind.g.cs
+C:\Users\user\Escritorio\Compi\Proyecto\thirdStage\MiniCSharpCompilator2023\Compilator\Compilator\obj\Debug\InputWind.baml

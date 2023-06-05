@@ -19,7 +19,7 @@ formPars : type ident (COMMA type ident)*                                       
 
 type : ident (LBRACK RBRACK)?                                                      #typeAST;
 
-statement : designator (ASSIGN expr | LPARENT actPars? RPARENT | INC | DEC) SEMICOLON #assignStatementAST        
+statement locals[string valueInput, Type typeVInput] : designator (ASSIGN expr | LPARENT actPars? RPARENT | INC | DEC) SEMICOLON #assignStatementAST        
           | IF LPARENT condition RPARENT statement (ELSE statement)?            #ifStatementAST
           | FOR LPARENT expr SEMICOLON condition? SEMICOLON statement? RPARENT statement #forStatementAST
           | WHILE LPARENT condition RPARENT statement                           #whileStatementAST

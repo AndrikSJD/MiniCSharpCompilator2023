@@ -693,6 +693,8 @@ public partial class MiniCSharpParser : Parser {
 	}
 
 	public partial class StatementContext : ParserRuleContext {
+		public string valueInput;
+		public Type typeVInput;
 		public StatementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -702,6 +704,8 @@ public partial class MiniCSharpParser : Parser {
 		public StatementContext() { }
 		public virtual void CopyFrom(StatementContext context) {
 			base.CopyFrom(context);
+			this.valueInput = context.valueInput;
+			this.typeVInput = context.typeVInput;
 		}
 	}
 	public partial class WhileStatementASTContext : StatementContext {

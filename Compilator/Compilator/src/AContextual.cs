@@ -1146,11 +1146,70 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         // Comparamos el tipo de retorno con el tipo de retorno del método actual (ignorando mayúsculas y minúsculas)
         return string.Equals(returnType, _symbolTable.currentMethod.ReturnTypeGetSet, StringComparison.OrdinalIgnoreCase);
     }
+    
+    private Type returnReadType(string typeName)
+    {
+        switch (typeName)
+        {
+            case "int":
+                return typeof(double);
+            case "char":
+                return typeof(char);
+            case "string":
+                return typeof(string);
+            case "double":
+                return typeof(double);
+            case "boolean":
+                return typeof(bool);
+            case "void":
+                return typeof(void);
+            default:
+                // Si el tipo no se reconoce, se asume que es un tipo definido por el usuario
+                return Type.GetType(typeName);
+        }
+    }
 
 
     public override object VisitReadStatementAST(MiniCSharpParser.ReadStatementASTContext context)
     {
-        Visit(context.designator());
+        string result = (string)Visit(context.designator());
+        if (result == null)
+        {
+            consola.SalidaConsola.AppendText($"Error: La variable en el read:  \"{context.designator().GetText()}\" no existe. {ShowToken(context.Start)}\n");
+            return null;
+        }
+        
+        //Abrimos la ventana de dialogo para ingresar el valor
+        InputWind input = new InputWind(context.designator().GetText());
+        input.ShowDialog();
+        string inputText = input.InputValue;
+       
+        //Verificamos que el valor ingresado sea del tipo correcto
+        Type readType = returnReadType(result.ToLower());
+        if (readType != typeof(double) && readType != typeof(char) && readType != typeof(string) && readType != typeof(bool))
+        {
+            consola.SalidaConsola.AppendText($"Error: La variable en el read:  \"{context.designator().GetText()}\" no es de un tipo válido. {ShowToken(context.Start)}\n");
+            return null;
+        }
+        // Intentar convertir a char
+        if ((result.ToLower().Equals("char") && !(char.TryParse(inputText, out char charResult))) ||
+            (result.ToLower().Equals("boolean") && !(bool.TryParse(inputText, out bool boolResult))) ||
+            (result.ToLower().Equals("int") && !(int.TryParse(inputText, out int intResult))) ||
+            (result.ToLower().Equals("double") && !(double.TryParse(inputText, out double doubleResult))))
+        {
+
+            consola.SalidaConsola.AppendText(
+                $"Error: La ingresado en el read:  \"{context.designator().GetText()}\" no corresponde a su tipo \"{result}\" . {ShowToken(context.Start)}\n");
+            return null;
+        }
+
+        //Asignamos el valor ingresado a la variable local del contexto y su respectivo valor
+        context.valueInput = inputText;
+        context.typeVInput =  returnReadType(result.ToLower());
+        consola.SalidaConsola.AppendText($"El valor ingresado es: {inputText} \n");
+        consola.SalidaConsola.AppendText($"El tipo del valor ingresado es: {returnReadType(result.ToLower())} \n");
+        
+        
         return null;
     }
 
@@ -1655,10 +1714,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
     public override object? VisitDesignatorAST(MiniCSharpParser.DesignatorASTContext context)
     {   
         IToken currentToken = context.Start;
-
-        //preguntar si tiene parentesis es decir es una llamda a un metodo de funcion
         
-        // System.Diagnostics.Debug.WriteLine("DESIGNATOR TEXTO: "+context.ident(0).GetText());
         
         
         // Buscar el tipo de la variable en la tabla de símbolos
@@ -1668,14 +1724,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         {
             consola.SalidaConsola.AppendText($"Error: No se encontró el identificador. {ShowToken(currentToken)}\n");
         }
-        else
-        {
-            
-        }
-      
-        
 
-        
         // Si el tipo de la variable es un arreglo y solo hay una expresión
         if (typeIdent is ArrayTypeData && context.expr().Length == 1) //cuando es arreglo
         {

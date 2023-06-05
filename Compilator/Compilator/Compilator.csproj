@@ -125,9 +125,11 @@
         <Compile Include="Consola.xaml.cs">
           <DependentUpon>Consola.xaml</DependentUpon>
         </Compile>
+        <Compile Include="InputWind.xaml.cs">
+          <DependentUpon>InputWind.xaml</DependentUpon>
+        </Compile>
         <Compile Include="src\AContextual.cs" />
         <Compile Include="src\CodeGeneration.cs" />
-        <Compile Include="src\codeGen1st.cs" />
         <Compile Include="src\MyErrorStategy.cs" />
         <Compile Include="src\ParserErrores.cs" />
         <Compile Include="src\ScannerErrores.cs" />
@@ -143,6 +145,7 @@
         <Compile Include="src\SyntacticAnalysisGenerated\MiniCSharpParserVisitor.cs" />
         <Compile Include="src\SyntacticAnalysisGenerated\MiniCSharpScanner.cs" />
         <Page Include="Consola.xaml" />
+        <Page Include="InputWind.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>

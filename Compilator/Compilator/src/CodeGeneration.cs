@@ -5,7 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
-using System.Windows.Media;
+
+using Compilator;
 
 namespace SyntacticAnalysisGenerated;
 
@@ -573,7 +574,97 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
 
     public override object VisitReadStatementAST(MiniCSharpParser.ReadStatementASTContext context)
     {
-        return base.VisitReadStatementAST(context);
+        //read statement
+        ILGenerator currentIL = currentMethodBldr.GetILGenerator();
+        
+        //Nombre del designator
+        string name = context.designator().GetText();
+        
+        //Verificamos el tipo de la variable ingresada
+        Type type = context.typeVInput;
+        
+        if (type == typeof(int))
+        {
+            string intEntry = context.valueInput +".0";
+            intEntry= intEntry.Replace(".", ",");
+            double OutVal;
+            double.TryParse(intEntry, out OutVal);
+            //se agrega el valor a la pila
+            currentIL.Emit(OpCodes.Ldc_R8 , OutVal);
+            
+            //se obtiene el localbuilder de la variable local
+            LocalBuilder local = localVariables[name];
+           
+            //se guarda el valor en la variable local
+            currentIL.Emit(OpCodes.Stloc, local.LocalIndex);
+            
+        }
+        else if (type == typeof(double))
+        {
+            string doubleEntry = context.valueInput;
+            //se reemplaza el . por , para que el double sea valido el parseo
+            doubleEntry= doubleEntry.Replace(".", ",");
+            double convertedDouble;
+            double.TryParse(doubleEntry, out convertedDouble);
+            //se agrega el valor a la pila
+            currentIL.Emit(OpCodes.Ldc_R8 , convertedDouble);
+            
+            //se obtiene el localbuilder de la variable local
+            LocalBuilder local = localVariables[name];
+           
+            //se guarda el valor en la variable local
+            currentIL.Emit(OpCodes.Stloc, local.LocalIndex);
+           
+        }
+        else if (type == typeof(string))
+        {
+            //se carga a la pila
+            currentIL.Emit(OpCodes.Ldstr, context.valueInput);
+            
+            //se obtiene el localbuilder de la variable local
+            LocalBuilder local = localVariables[name];
+           
+            //se guarda el valor en la variable local
+            currentIL.Emit(OpCodes.Stloc, local.LocalIndex);
+        }
+        else if (type == typeof(char))
+        {
+            
+            //lo convierte a char
+            char convertedChar = char.TryParse( context.valueInput, out convertedChar) ? convertedChar : ' ';
+            
+            //se agrega el valor a la pila
+            currentIL.Emit(OpCodes.Ldc_I4_S, convertedChar);
+            
+            //se obtiene el localbuilder de la variable local
+            LocalBuilder local = localVariables[name];
+            
+            //se guarda el valor en la variable local
+            currentIL.Emit(OpCodes.Stloc, local.LocalIndex);
+        }
+        else if (type == typeof(bool))
+        {
+            int num;
+            //en caso de que venga un true
+            if (context.valueInput != null)
+            {
+                num = context.valueInput == "true" ? 1 : 0;
+            }
+            else//en caso de que sea false
+            { num = 0;
+            }
+
+            //se agrega el valor a la pila como entero 1 o 0
+            currentIL.Emit(OpCodes.Ldc_I4, num);
+            
+            //se obtiene el localbuilder de la variable local
+            LocalBuilder local = localVariables[name];
+           
+            //se guarda el valor en la variable local
+            currentIL.Emit(OpCodes.Stloc, local.LocalIndex);
+        }
+        
+        return null;
     }
 
     public override object VisitWriteStatementAST(MiniCSharpParser.WriteStatementASTContext context)
