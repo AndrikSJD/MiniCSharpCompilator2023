@@ -40,7 +40,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
     
     
     //Diccionario para guardar clases
-    private Dictionary<string, TypeBuilder> classesList;
+    private Dictionary<string, Type> classesList;
     
     //Variable para saber si estamos dentro de un metodo
     private bool isOnClass = false;
@@ -58,13 +58,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
     //Variable para saber si estamos dentro de un for o while
     bool onFor = false, onWhile = false;
 
-
     
-    
-
-
-
-
 
     public CodeGeneration()
     {
@@ -73,7 +67,7 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
         globalMethods = new List<MethodBuilder>();
         globalVariables = new Dictionary<string, FieldBuilder>();
         localVariables = new Dictionary<string, LocalBuilder>();
-        classesList = new Dictionary<string, TypeBuilder>();
+        classesList = new Dictionary<string, Type>();
 
 
         myAsmName.Name = "TestASM";
@@ -255,11 +249,11 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
         }
 
         //Crea
-        classBuilder.CreateType(); //Crea un objeto Type para esta clase. Después de definir los campos y métodos en la clase,
+        Type classB = classBuilder.CreateType(); //Crea un objeto Type para esta clase. Después de definir los campos y métodos en la clase,
                                    //se llama a CreateType para cargar su objeto Type.
         
         // Almacenar en la lista de clases
-        classesList.Add(context.ident().GetText(), classBuilder);
+        classesList.Add(context.ident().GetText(), classB);
 
         
         //Indicar que se salio de la clase
@@ -350,6 +344,17 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
         return context.ident().GetText();
     }
 
+    MethodBuilder searchMethod(string name)
+    {
+        foreach (var method in globalMethods)
+        {
+            if (method.Name.Equals(name))
+                return method;
+        }
+
+        return null;
+    }
+
     public override object VisitAssignStatementAST(MiniCSharpParser.AssignStatementASTContext context)
     {
 
@@ -358,6 +363,23 @@ public class CodeGeneration : MiniCSharpParserBaseVisitor<Object>
         
         //obtiene el nombre del designator
         string name = context.designator().GetText();
+
+
+        if (context.LPARENT() != null) // si es una llamada a método -----------------------------------------------------------------------------------
+        {
+            //se visita la designator para generar el bytecode correspondiente (QUEDARÁ EN EL TOPE DE LA PILA EL VALOR A ASIGNAR)
+            Visit(context.designator());
+
+            //se visita la lista de parámetros para generar el bytecode correspondiente
+            if (context.actPars() != null)
+            {
+                Visit(context.actPars());
+            }
+
+            //se llama al método
+            currentIL.Emit(OpCodes.Call, searchMethod(name));
+        }
+        
         
         
         //Si es una asignacion
