@@ -1206,8 +1206,7 @@ public class AContextual : MiniCSharpParserBaseVisitor<object> {
         //Asignamos el valor ingresado a la variable local del contexto y su respectivo valor
         context.valueInput = inputText;
         context.typeVInput =  returnReadType(result.ToLower());
-        consola.SalidaConsola.AppendText($"El valor ingresado es: {inputText} \n");
-        consola.SalidaConsola.AppendText($"El tipo del valor ingresado es: {returnReadType(result.ToLower())} \n");
+       
         
         
         return null;
